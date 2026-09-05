@@ -22,7 +22,7 @@ export default function Navbar({ policy, cartCount, openCart, openProfile, custo
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-lg tracking-tight text-white">AgentCommerce</span>
+              <span className="font-bold text-lg tracking-tight text-white">AgentRelay</span>
               <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                 AI-Native
               </span>

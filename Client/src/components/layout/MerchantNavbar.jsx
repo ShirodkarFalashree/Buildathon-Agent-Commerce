@@ -11,24 +11,24 @@ export default function MerchantNavbar({ policy, merchantUser, onLogout }) {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 glass-panel">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/90 backdrop-blur-md shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Merchant Branding */}
         <Link to="/merchant" className="flex items-center space-x-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-emerald-400 p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-all">
-            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <Store className="w-5 h-5 text-indigo-400" />
+          <div className="w-9 h-9 rounded-xl bg-indigo-600 p-0.5 shadow-sm shadow-indigo-500/20 group-hover:scale-105 transition-all">
+            <div className="w-full h-full bg-indigo-600 rounded-[10px] flex items-center justify-center text-white">
+              <Store className="w-5 h-5" />
             </div>
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="font-bold text-lg tracking-tight text-white">AgentCommerce Console</span>
-              <span className="text-[10px] font-semibold uppercase px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              <span className="font-extrabold text-lg tracking-tight text-slate-900">AgentRelay Console</span>
+              <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
                 Merchant Admin
               </span>
             </div>
-            <p className="text-xs text-slate-400 hidden sm:block">{policy?.storeName || 'Flagship Store Operations'}</p>
+            <p className="text-xs text-slate-500 hidden sm:block font-medium">{policy?.storeName || 'Flagship Store Operations'}</p>
           </div>
         </Link>
 
@@ -37,22 +37,22 @@ export default function MerchantNavbar({ policy, merchantUser, onLogout }) {
           
           {/* Policy Limit Badge */}
           {policy && (
-            <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Limit: <strong className="text-white">₹{policy.autonomousPurchaseLimit?.toLocaleString()}</strong></span>
+            <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-semibold">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>Limit: <strong className="text-slate-900">₹{policy.autonomousPurchaseLimit?.toLocaleString()}</strong></span>
             </div>
           )}
 
           {/* Admin Email */}
           <div className="hidden md:flex flex-col text-right">
-            <span className="text-xs font-bold text-white">{merchantUser?.name || 'Store Administrator'}</span>
-            <span className="text-[11px] text-slate-400">{merchantUser?.email || 'merchant@agentcommerce.ai'}</span>
+            <span className="text-xs font-bold text-slate-900">{merchantUser?.name || 'Store Administrator'}</span>
+            <span className="text-[11px] text-slate-500">{merchantUser?.email || 'merchant@agentrelay.ai'}</span>
           </div>
 
           {/* Logout Button */}
           <button
             onClick={handleLogoutClick}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-red-400 hover:border-red-500/30 transition-all text-xs font-semibold"
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-slate-600 hover:text-red-600 hover:border-red-200 transition-all text-xs font-semibold shadow-2xs"
             title="Log Out of Merchant Console"
           >
             <LogOut className="w-3.5 h-3.5" />

@@ -10,7 +10,7 @@ const policySchema = new mongoose.Schema(
     },
     storeName: {
       type: String,
-      default: "AgentCommerce Flagship",
+      default: "AgentRelay Flagship",
     },
     autonomousPurchaseLimit: {
       type: Number,

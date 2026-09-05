@@ -10,7 +10,7 @@ exports.getProfile = async (req, res) => {
       customer = await Customer.create({
         sessionId,
         name: "Alex Vance",
-        email: "alex@agentcommerce.ai",
+        email: "alex@agentrelay.ai",
         savedPaymentMethod: {
           cardHolder: "Alex Vance",
           cardNumberMasked: "**** **** **** 4912",

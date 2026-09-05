@@ -78,7 +78,7 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
         key: rzpKey,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency || 'INR',
-        name: 'AgentCommerce Flagship',
+        name: 'AgentRelay Flagship',
         description: `Order #${order.orderNumber} - Autonomous AI Order`,
         image: chatResult.primaryProduct?.imageUrl || 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=200',
         order_id: (razorpayOrder.id && !razorpayOrder.id.startsWith('order_test_')) ? razorpayOrder.id : undefined,
@@ -106,7 +106,7 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
         },
         prefill: {
           name: 'Demo Buyer',
-          email: 'buyer@agentcommerce.ai',
+          email: 'buyer@agentrelay.ai',
           contact: '9876543210',
         },
         theme: {
@@ -158,17 +158,17 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] z-50 glass-panel border-l border-slate-800 shadow-2xl flex flex-col justify-between">
+    <div className="fixed inset-y-0 right-0 w-full sm:w-[500px] z-50 bg-white border-l border-slate-200 shadow-2xl flex flex-col justify-between">
       
       {/* Drawer Header */}
-      <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+      <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/80 backdrop-blur-md">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+          <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600 shadow-xs">
             <Bot className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-white text-sm">AI Shopping Sales Agent</h3>
-            <p className="text-[11px] text-slate-400">Natural Language Commerce Agent</p>
+            <h3 className="font-bold text-slate-900 text-sm">AI Shopping Sales Agent</h3>
+            <p className="text-[11px] text-slate-500">Natural Language Commerce Agent</p>
           </div>
         </div>
 
@@ -176,17 +176,17 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
           {chatResult && (
             <button
               onClick={clearChat}
-              className="p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-red-400 border border-slate-800 text-xs flex items-center space-x-1"
+              className="p-1.5 rounded-lg bg-white text-slate-500 hover:text-red-600 hover:bg-red-50 border border-slate-200 text-xs flex items-center space-x-1 shadow-xs transition-colors"
               title="Clear Chat"
             >
               <Trash2 className="w-3.5 h-3.5" />
-              <span className="text-[10px]">Clear</span>
+              <span className="text-[10px] font-medium">Clear</span>
             </button>
           )}
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg bg-slate-900 text-slate-400 hover:text-white border border-slate-800 text-xs"
+            className="p-1.5 rounded-lg bg-white text-slate-400 hover:text-slate-700 border border-slate-200 text-xs shadow-xs transition-colors"
           >
             ✕
           </button>
@@ -194,12 +194,12 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
       </div>
 
       {/* Main Chat Body & Tool Calls */}
-      <div className="flex-1 p-5 overflow-y-auto space-y-5">
+      <div className="flex-1 p-5 overflow-y-auto space-y-5 bg-slate-50/50">
         
         {/* Sample Prompt Suggestions */}
         {!chatResult && !loading && (
           <div className="space-y-3">
-            <p className="text-xs text-slate-400 font-medium">Try asking the agent:</p>
+            <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Try asking the agent:</p>
             <div className="space-y-2">
               {samplePrompts.map((p, idx) => (
                 <button
@@ -208,10 +208,10 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
                     setPrompt(p);
                     handleSend(p);
                   }}
-                  className="w-full text-left p-3 rounded-xl bg-slate-900/80 hover:bg-slate-800/80 border border-slate-800 text-xs text-slate-300 transition-all flex items-center justify-between group"
+                  className="w-full text-left p-3 rounded-xl bg-white hover:bg-indigo-50/50 hover:border-indigo-300 border border-slate-200 text-xs text-slate-700 font-medium transition-all shadow-xs flex items-center justify-between group"
                 >
                   <span>"{p}"</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-indigo-400 opacity-0 group-hover:opacity-100 transition-all" />
+                  <ArrowRight className="w-3.5 h-3.5 text-indigo-600 opacity-0 group-hover:opacity-100 transition-all" />
                 </button>
               ))}
             </div>
@@ -220,10 +220,10 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
 
         {/* Loading Indicator with Agent Thought Loop */}
         {loading && (
-          <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3 text-center">
-            <Loader2 className="w-6 h-6 text-indigo-400 animate-spin mx-auto" />
-            <p className="text-xs font-semibold text-indigo-300">Evaluating Catalog & Enforcing Policy...</p>
-            <div className="text-[11px] text-slate-400 space-y-1">
+          <div className="p-5 rounded-xl bg-indigo-50/50 border border-indigo-100 space-y-3 text-center shadow-xs">
+            <Loader2 className="w-6 h-6 text-indigo-600 animate-spin mx-auto" />
+            <p className="text-xs font-semibold text-indigo-900">Evaluating Catalog & Enforcing Policy...</p>
+            <div className="text-[11px] text-indigo-700/80 space-y-1 font-medium">
               <div>• OBSERVE: Parsing user prompt intent</div>
               <div>• REASON: Searching merchant catalog items</div>
               <div>• POLICY CHECK: Evaluating ₹10,000 limit</div>
@@ -236,23 +236,23 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
           <div className="space-y-5 animate-in fade-in duration-300">
             
             {/* Intent Badge */}
-            <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
-              <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">Customer Intent</span>
-              <p className="text-xs text-slate-200">{chatResult.intentSummary}</p>
+            <div className="p-3 rounded-xl bg-white border border-slate-200 shadow-xs space-y-1">
+              <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">Customer Intent</span>
+              <p className="text-xs text-slate-800 font-medium">{chatResult.intentSummary}</p>
             </div>
 
             {/* 8-Step Agent-to-Agent (A2A) Live Dialogue & Protocol Trace */}
             {chatResult.a2aProtocolSteps && chatResult.a2aProtocolSteps.length > 0 && (
-              <div className="p-4 rounded-xl bg-slate-900/95 border border-indigo-500/40 space-y-3 shadow-xl">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+              <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-3 shadow-xs">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
                   <div className="flex items-center space-x-2">
                     <span className="relative flex h-2.5 w-2.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
                     </span>
-                    <span className="text-xs font-bold text-white tracking-wide">Live Inter-Agent (A2A) Dialogue</span>
+                    <span className="text-xs font-bold text-slate-900 tracking-wide">Live Inter-Agent (A2A) Dialogue</span>
                   </div>
-                  <span className="text-[10px] font-mono text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20 font-semibold">
+                  <span className="text-[10px] font-mono text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 font-semibold">
                     Dual Autonomous Policy
                   </span>
                 </div>
@@ -266,37 +266,37 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
                     return (
                       <div key={idx} className={`flex items-start space-x-2.5 ${isMerchant ? 'flex-row-reverse space-x-reverse' : ''}`}>
                         {/* Agent Avatar Icon */}
-                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 border shadow-sm ${
-                          isBuyer ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-300' :
-                          isMerchant ? 'bg-emerald-600/20 border-emerald-500/40 text-emerald-300' :
-                          isPayment ? 'bg-sky-600/20 border-sky-500/40 text-sky-300' :
-                          'bg-amber-600/20 border-amber-500/40 text-amber-300'
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 border shadow-xs ${
+                          isBuyer ? 'bg-indigo-50 border-indigo-200 text-indigo-700' :
+                          isMerchant ? 'bg-emerald-50 border-emerald-200 text-emerald-700' :
+                          isPayment ? 'bg-sky-50 border-sky-200 text-sky-700' :
+                          'bg-amber-50 border-amber-200 text-amber-700'
                         }`}>
                           {isBuyer ? '🤖' : isMerchant ? '🏪' : isPayment ? '💳' : '🛡️'}
                         </div>
 
                         {/* Speech Bubble */}
-                        <div className={`flex-1 p-2.5 rounded-xl text-xs space-y-1 border ${
-                          isBuyer ? 'bg-indigo-950/40 border-indigo-500/20 text-slate-200' :
-                          isMerchant ? 'bg-emerald-950/40 border-emerald-500/20 text-slate-200' :
-                          isPayment ? 'bg-sky-950/40 border-sky-500/20 text-slate-200' :
-                          'bg-amber-950/40 border-amber-500/20 text-slate-200'
+                        <div className={`flex-1 p-2.5 rounded-xl text-xs space-y-1 border shadow-xs ${
+                          isBuyer ? 'bg-indigo-50/70 border-indigo-100 text-slate-800' :
+                          isMerchant ? 'bg-emerald-50/70 border-emerald-100 text-slate-800' :
+                          isPayment ? 'bg-sky-50/70 border-sky-100 text-slate-800' :
+                          'bg-amber-50/70 border-amber-100 text-slate-800'
                         }`}>
                           <div className="flex items-center justify-between text-[10px]">
                             <span className={`font-mono font-bold ${
-                              isBuyer ? 'text-indigo-400' :
-                              isMerchant ? 'text-emerald-400' :
-                              isPayment ? 'text-sky-400' :
-                              'text-amber-400'
+                              isBuyer ? 'text-indigo-700' :
+                              isMerchant ? 'text-emerald-700' :
+                              isPayment ? 'text-sky-700' :
+                              'text-amber-700'
                             }`}>
                               {step.sender.replace('_', ' ')} → {step.receiver.replace('_', ' ')}
                             </span>
                             <span className="text-[9px] text-slate-400 font-mono">Step {step.stepNumber}</span>
                           </div>
 
-                          <p className="font-medium leading-relaxed">{step.message}</p>
+                          <p className="font-medium leading-relaxed text-slate-800">{step.message}</p>
                           {step.detail && (
-                            <p className="text-[10px] text-slate-400 border-t border-slate-800/80 pt-1 mt-1 font-mono">
+                            <p className="text-[10px] text-slate-500 border-t border-slate-200/80 pt-1 mt-1 font-mono">
                               💡 {step.detail}
                             </p>
                           )}
@@ -310,43 +310,43 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
 
             {/* Recommendation Card */}
             {chatResult.primaryProduct && (
-              <div className="p-4 rounded-xl bg-slate-900 border border-indigo-500/30 space-y-3 shadow-lg">
+              <div className="p-4 rounded-xl bg-white border border-indigo-100 space-y-3 shadow-sm">
                 <div className="flex items-center justify-between">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                  <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
                     Primary Recommendation
                   </span>
-                  <span className="text-xs text-amber-400 font-bold">★ {chatResult.primaryProduct.rating || 4.8}</span>
+                  <span className="text-xs text-amber-600 font-bold">★ {chatResult.primaryProduct.rating || 4.8}</span>
                 </div>
 
                 <div className="flex space-x-3">
                   <img
                     src={chatResult.primaryProduct.imageUrl}
                     alt={chatResult.primaryProduct.title}
-                    className="w-16 h-16 rounded-lg object-cover bg-slate-800 border border-slate-700"
+                    className="w-16 h-16 rounded-lg object-cover bg-slate-100 border border-slate-200 shadow-xs"
                     onError={(e) => {
                       e.target.src = 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=800';
                     }}
                   />
                   <div>
-                    <h4 className="font-bold text-white text-xs">{chatResult.primaryProduct.title}</h4>
-                    <div className="text-sm font-extrabold text-indigo-300 mt-0.5">
+                    <h4 className="font-bold text-slate-900 text-xs">{chatResult.primaryProduct.title}</h4>
+                    <div className="text-sm font-extrabold text-indigo-600 mt-0.5">
                       ₹{chatResult.primaryProduct.price.toLocaleString()}
                     </div>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800">
+                <p className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200 font-medium">
                   "{chatResult.recommendationReason}"
                 </p>
 
                 {/* Cross-Sell Bundle Option */}
                 {chatResult.crossSellProduct && (
-                  <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 space-y-1">
+                  <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 space-y-1">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span className="font-bold text-emerald-400">Cross-sell Accessory Suggested</span>
-                      <span className="font-bold text-white">₹{chatResult.crossSellProduct.price}</span>
+                      <span className="font-bold text-emerald-800">Cross-sell Accessory Suggested</span>
+                      <span className="font-bold text-slate-900">₹{chatResult.crossSellProduct.price}</span>
                     </div>
-                    <p className="text-[11px] text-slate-300">{chatResult.crossSellProduct.title}</p>
+                    <p className="text-[11px] text-slate-700 font-medium">{chatResult.crossSellProduct.title}</p>
                   </div>
                 )}
               </div>
@@ -354,16 +354,16 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
 
             {/* Policy Enforcement Warning / Status */}
             {chatResult.policyEvaluation && (
-              <div className={`p-4 rounded-xl border space-y-2 ${
+              <div className={`p-4 rounded-xl border space-y-2 shadow-xs ${
                 chatResult.policyEvaluation.requiresApproval
-                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
-                  : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                  ? 'bg-amber-50 border-amber-200 text-amber-900'
+                  : 'bg-emerald-50 border-emerald-200 text-emerald-900'
               }`}>
                 <div className="flex items-center space-x-2 text-xs font-bold">
                   {chatResult.policyEvaluation.requiresApproval ? (
-                    <Lock className="w-4 h-4 text-amber-400" />
+                    <Lock className="w-4 h-4 text-amber-600" />
                   ) : (
-                    <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   )}
                   <span>
                     {chatResult.policyEvaluation.requiresApproval
@@ -372,14 +372,14 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
                   </span>
                 </div>
 
-                <p className="text-xs opacity-90">
+                <p className="text-xs opacity-90 font-medium">
                   {chatResult.policyEvaluation.reasons?.[0]}
                 </p>
 
                 {chatResult.policyEvaluation.requiresApproval ? (
                   <button
                     onClick={() => onRequestApproval(chatResult)}
-                    className="w-full mt-2 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-md flex items-center justify-center space-x-2"
+                    className="w-full mt-2 py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center space-x-2"
                   >
                     <span>Authorize Purchase (₹{chatResult.cart?.total?.toLocaleString()})</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -388,7 +388,7 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
                   <button
                     onClick={handleDirectCheckout}
                     disabled={checkingOut}
-                    className="w-full mt-2 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all shadow-md flex items-center justify-center space-x-2"
+                    className="w-full mt-2 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-all shadow-xs flex items-center justify-center space-x-2"
                   >
                     {checkingOut ? (
                       <>
@@ -412,7 +412,7 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
       </div>
 
       {/* Chat Prompt Footer Input */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/80">
+      <div className="p-4 border-t border-slate-200 bg-white">
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -425,12 +425,12 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Ask AI agent for recommendations (e.g. Find travel headphones under ₹20k)..."
-            className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+            className="flex-1 bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:bg-white transition-colors"
           />
           <button
             type="submit"
             disabled={loading || !prompt.trim()}
-            className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white transition-all"
+            className="p-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white transition-all shadow-xs"
           >
             <Send className="w-4 h-4" />
           </button>
@@ -440,3 +440,4 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
     </div>
   );
 }
+

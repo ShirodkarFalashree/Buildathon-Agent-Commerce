@@ -119,7 +119,7 @@ exports.createProduct = async (req, res) => {
       slug: `${slug}-${Date.now().toString().slice(-4)}`,
       description: description || "No detailed description provided.",
       category: category || "Audio",
-      brand: brand || "AgentCommerce Store",
+      brand: brand || "AgentRelay Store",
       price: Number(price),
       stock: Number(stock !== undefined ? stock : 50),
       sku: generatedSku,

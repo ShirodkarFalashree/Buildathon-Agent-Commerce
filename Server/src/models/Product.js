@@ -27,7 +27,7 @@ const productSchema = new mongoose.Schema(
     brand: {
       type: String,
       required: true,
-      default: "AgentCommerce Generic",
+      default: "AgentRelay Generic",
     },
     price: {
       type: Number,

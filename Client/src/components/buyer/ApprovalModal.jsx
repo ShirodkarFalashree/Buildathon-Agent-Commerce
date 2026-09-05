@@ -38,7 +38,7 @@ export default function ApprovalModal({ isOpen, onClose, agentResponse, onPaymen
         key: rzpKey,
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency || 'INR',
-        name: 'AgentCommerce Flagship',
+        name: 'AgentRelay Flagship',
         description: `Order #${order.orderNumber} - AI Recommended`,
         image: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=200',
         order_id: (razorpayOrder.id && !razorpayOrder.id.startsWith('order_test_')) ? razorpayOrder.id : undefined,
@@ -65,7 +65,7 @@ export default function ApprovalModal({ isOpen, onClose, agentResponse, onPaymen
         },
         prefill: {
           name: 'Demo Buyer',
-          email: 'buyer@agentcommerce.ai',
+          email: 'buyer@agentrelay.ai',
           contact: '9876543210',
         },
         theme: {
@@ -113,64 +113,64 @@ export default function ApprovalModal({ isOpen, onClose, agentResponse, onPaymen
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="w-full max-w-lg glass-panel p-6 rounded-2xl border border-amber-500/30 shadow-2xl space-y-5 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="w-full max-w-lg bg-white p-6 rounded-2xl border border-amber-200 shadow-2xl space-y-5 relative">
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-white bg-slate-900 border border-slate-800 text-xs"
+          className="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-slate-700 bg-slate-50 border border-slate-200 text-xs shadow-xs transition-colors"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Warning Icon & Header */}
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 shadow-xs">
             <Lock className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-white text-base">Human Spending Authorization Required</h3>
-            <p className="text-xs text-amber-300">Backend Policy Security Guardrail Triggered</p>
+            <h3 className="font-bold text-slate-900 text-base">Human Spending Authorization Required</h3>
+            <p className="text-xs text-amber-700 font-medium">Backend Policy Security Guardrail Triggered</p>
           </div>
         </div>
 
         {/* Policy Limit Alert Box */}
-        <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs space-y-2">
+        <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-2 shadow-xs">
           <div className="flex justify-between font-semibold">
             <span>Requested Cart Total:</span>
-            <span className="text-white font-extrabold text-sm">₹{total.toLocaleString()}</span>
+            <span className="text-slate-900 font-extrabold text-sm">₹{total.toLocaleString()}</span>
           </div>
-          <div className="flex justify-between font-semibold text-slate-300">
+          <div className="flex justify-between font-semibold text-slate-700">
             <span>Autonomous Purchase Limit:</span>
             <span>₹{limit.toLocaleString()}</span>
           </div>
-          <div className="pt-2 border-t border-amber-500/20 text-[11px]">
+          <div className="pt-2 border-t border-amber-200 text-[11px] text-amber-800 font-medium">
             ⚠️ Because ₹{total.toLocaleString()} exceeds ₹{limit.toLocaleString()}, the AI agent is deterministically blocked from placing the order without human approval.
           </div>
         </div>
 
         {/* Error Alert Message if server blocks */}
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-center space-x-2">
-            <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+          <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center space-x-2 shadow-xs">
+            <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {/* Cart Item Summary */}
-        <div className="space-y-2 border-t border-b border-slate-800 py-3">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cart Breakdown</span>
+        <div className="space-y-2 border-t border-b border-slate-100 py-3">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Cart Breakdown</span>
           
           {primaryProduct && (
-            <div className="flex justify-between text-xs text-white">
+            <div className="flex justify-between text-xs text-slate-900 font-medium">
               <span>1x {primaryProduct.title}</span>
               <span className="font-bold">₹{primaryProduct.price.toLocaleString()}</span>
             </div>
           )}
 
           {crossSellProduct && (
-            <div className="flex justify-between text-xs text-slate-300">
+            <div className="flex justify-between text-xs text-slate-600">
               <span>1x {crossSellProduct.title} (Flight Cross-sell)</span>
               <span className="font-bold">₹{crossSellProduct.price.toLocaleString()}</span>
             </div>
@@ -181,7 +181,7 @@ export default function ApprovalModal({ isOpen, onClose, agentResponse, onPaymen
         <div className="flex space-x-3 pt-2">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-xs border border-slate-700 transition-all"
+            className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs border border-slate-200 transition-all shadow-xs"
           >
             Cancel
           </button>
@@ -189,7 +189,7 @@ export default function ApprovalModal({ isOpen, onClose, agentResponse, onPaymen
           <button
             onClick={handleConfirmAuthorization}
             disabled={authorizing}
-            className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition-all flex items-center justify-center space-x-2"
+            className="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-sm transition-all flex items-center justify-center space-x-2"
           >
             {authorizing ? (
               <>
@@ -209,3 +209,4 @@ export default function ApprovalModal({ isOpen, onClose, agentResponse, onPaymen
     </div>
   );
 }
+

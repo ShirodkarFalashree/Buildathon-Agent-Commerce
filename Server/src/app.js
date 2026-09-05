@@ -40,7 +40,7 @@ app.use("/api/merchant", merchantRoutes);
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "AgentCommerce API is running",
+    message: "AgentRelay API is running",
     timestamp: new Date().toISOString(),
   });
 });

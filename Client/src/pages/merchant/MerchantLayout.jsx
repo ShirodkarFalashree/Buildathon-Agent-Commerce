@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Routes, Route } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Package, 
@@ -39,7 +39,7 @@ export default function MerchantLayout({ policy, setPolicy, merchantUser, onLogo
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900">
       
       {/* Dedicated Merchant Top Navbar */}
       <MerchantNavbar policy={policy} merchantUser={merchantUser} onLogout={onLogout} />
@@ -48,23 +48,23 @@ export default function MerchantLayout({ policy, setPolicy, merchantUser, onLogo
       <div className="flex-1 flex flex-col md:flex-row">
         
         {/* Merchant Sidebar Navigation */}
-        <aside className="w-full md:w-64 border-r border-slate-800/80 glass-panel p-4 space-y-6 shrink-0">
+        <aside className="w-full md:w-64 border-r border-slate-200 bg-white p-5 space-y-6 shrink-0 shadow-2xs">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 px-2 py-0.5 rounded bg-indigo-500/10 border border-indigo-500/20">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-700 px-2 py-0.5 rounded bg-indigo-50 border border-indigo-200">
               Merchant Operations
             </span>
-            <h2 className="text-lg font-bold text-white mt-1">Store Console</h2>
+            <h2 className="text-base font-extrabold text-slate-900 mt-2 tracking-tight">Store Console</h2>
           </div>
 
-          <nav className="space-y-1 text-xs">
+          <nav className="space-y-1 text-xs font-semibold">
             <NavLink
               to="/merchant"
               end
               className={({ isActive }) =>
-                `flex items-center space-x-3 px-3 py-2.5 rounded-xl font-semibold transition-all ${
+                `flex items-center space-x-3 px-3 py-2.5 rounded-xl font-bold transition-all ${
                   isActive
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                    ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/30'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`
               }
             >
@@ -75,15 +75,15 @@ export default function MerchantLayout({ policy, setPolicy, merchantUser, onLogo
           </nav>
 
           {/* Policy Quick Summary */}
-          <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2 text-xs">
-            <div className="flex items-center space-x-2 text-emerald-400 font-bold">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Policy Status Active</span>
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs">
+            <div className="flex items-center space-x-2 text-emerald-700 font-extrabold">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span>Selling Policy Active</span>
             </div>
-            <div className="text-[11px] text-slate-400 space-y-1">
-              <div>• Auto Limit: <strong className="text-white">₹{(policy?.autonomousPurchaseLimit || 10000).toLocaleString()}</strong></div>
-              <div>• Daily Cap: <strong className="text-white">₹{(policy?.dailySpendingLimit || 500000).toLocaleString()}</strong></div>
-              <div>• Today Spend: <strong className="text-indigo-300">₹{(policy?.currentDailySpend || 0).toLocaleString()}</strong></div>
+            <div className="text-[11px] text-slate-600 space-y-1 font-medium">
+              <div>• Max Disc %: <strong className="text-slate-900">{(policy?.maxDiscountPercent || 10)}%</strong></div>
+              <div>• Daily Cap: <strong className="text-slate-900">₹{(policy?.dailySpendingLimit || 500000).toLocaleString()}</strong></div>
+              <div>• Today Spend: <strong className="text-indigo-700 font-bold">₹{(policy?.currentDailySpend || 0).toLocaleString()}</strong></div>
             </div>
           </div>
         </aside>

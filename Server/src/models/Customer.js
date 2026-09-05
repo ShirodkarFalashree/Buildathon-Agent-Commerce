@@ -14,7 +14,7 @@ const customerSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      default: "alex@agentcommerce.ai",
+      default: "alex@agentrelay.ai",
     },
     phone: {
       type: String,

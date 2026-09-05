@@ -67,9 +67,9 @@ export default function OrderConfirmationPage({ completedOrder, sessionId, onBac
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-4">
-        <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin mx-auto" />
-        <h3 className="text-base font-bold text-white">Retrieving Official Razorpay Receipt...</h3>
-        <p className="text-xs text-slate-400">Fetching order record and AI decision trail from database ledger.</p>
+        <RefreshCw className="w-8 h-8 text-indigo-600 animate-spin mx-auto" />
+        <h3 className="text-base font-bold text-slate-900">Retrieving Official Razorpay Receipt...</h3>
+        <p className="text-xs text-slate-500">Fetching order record and AI decision trail from database ledger.</p>
       </div>
     );
   }
@@ -77,23 +77,23 @@ export default function OrderConfirmationPage({ completedOrder, sessionId, onBac
   if (error || !order) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-5">
-        <div className="w-12 h-12 rounded-full bg-slate-900 border border-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200 text-slate-400 flex items-center justify-center mx-auto shadow-xs">
           <ShoppingBag className="w-6 h-6" />
         </div>
-        <h2 className="text-xl font-bold text-white">No Receipt Found</h2>
-        <p className="text-xs text-slate-400">
+        <h2 className="text-xl font-bold text-slate-900">No Receipt Found</h2>
+        <p className="text-xs text-slate-500 font-medium">
           {error || 'No recent order found in database for this session.'}
         </p>
         <div className="flex items-center justify-center space-x-3 pt-2">
           <button
             onClick={() => navigate('/profile')}
-            className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-all shadow-lg shadow-indigo-600/30"
+            className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-all shadow-xs"
           >
             View Purchase History in Profile
           </button>
           <button
             onClick={() => navigate('/')}
-            className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 font-semibold text-xs transition-all"
+            className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-all shadow-xs"
           >
             Back to Storefront
           </button>
@@ -103,7 +103,7 @@ export default function OrderConfirmationPage({ completedOrder, sessionId, onBac
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full min-h-[calc(100vh-4rem)] bg-slate-50">
       <OrderConfirmation
         completedOrder={order}
         sessionId={order.sessionId || sessionId}
@@ -112,3 +112,4 @@ export default function OrderConfirmationPage({ completedOrder, sessionId, onBac
     </div>
   );
 }
+

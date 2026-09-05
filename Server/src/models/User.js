@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     storeName: {
       type: String,
-      default: "AgentCommerce Flagship Store",
+      default: "AgentRelay Flagship Store",
     },
   },
   {

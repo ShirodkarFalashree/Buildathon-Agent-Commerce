@@ -175,7 +175,7 @@ const initialProducts = [
     description:
       "Convert standard 3.5mm headphone jacks into dual-prong airplane in-flight entertainment sockets. Golden-plated connectors for crystal clear audio signal without static during long flights.",
     category: "Accessories",
-    brand: "AgentCommerce Travel",
+    brand: "AgentRelay Travel",
     price: 799,
     compareAtPrice: 1299,
     stock: 150,
@@ -284,7 +284,7 @@ const initialProducts = [
     description:
       "Waterproof EVA shockproof carrying case with plush velvet lining and cable mesh pocket. Fits Sony XM5, Bose QC Ultra, Sennheiser M4, and Anker Q45 perfectly.",
     category: "Accessories",
-    brand: "AgentCommerce Travel",
+    brand: "AgentRelay Travel",
     price: 1299,
     compareAtPrice: 1999,
     stock: 120,
@@ -319,7 +319,7 @@ const initialProducts = [
 
 const defaultPolicy = {
   merchantId: "default_merchant",
-  storeName: "AgentCommerce Flagship Store",
+  storeName: "AgentRelay Flagship Store",
   autonomousPurchaseLimit: 10000,
   dailySpendingLimit: 500000,
   currentDailySpend: 0,
@@ -333,14 +333,14 @@ const defaultPolicy = {
 const initialUsers = [
   {
     name: "Merchant Administrator",
-    email: "merchant@agentcommerce.ai",
+    email: "merchant@agentrelay.ai",
     password: "admin123",
     role: "MERCHANT",
-    storeName: "AgentCommerce Flagship Store",
+    storeName: "AgentRelay Flagship Store",
   },
   {
     name: "Alex Vance",
-    email: "buyer@agentcommerce.ai",
+    email: "buyer@agentrelay.ai",
     password: "buyer123",
     role: "BUYER",
   },
@@ -367,7 +367,7 @@ async function seed() {
         { upsert: true, returnDocument: "after", setDefaultsOnInsert: true }
       );
     }
-    console.log("✓ Demo Merchant (merchant@agentcommerce.ai) & Buyer (buyer@agentcommerce.ai) created");
+    console.log("✓ Demo Merchant (merchant@agentrelay.ai) & Buyer (buyer@agentrelay.ai) created");
 
     console.log("Seeding products...");
     let processedCount = 0;
