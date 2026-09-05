@@ -1,6 +1,5 @@
 # AgentRelay 🤖💳
 > **Autonomous Agent-to-Agent (A2A) Commerce & Payment Orchestration Platform**  
-> *Built for the Razorpay Buildathon*
 
 ---
 
