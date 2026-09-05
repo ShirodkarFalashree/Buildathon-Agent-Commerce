@@ -21,12 +21,13 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ["Headphones", "Accessories", "Audio", "Bundles"],
-      default: "Headphones",
+      enum: ["Audio", "Headphones", "Computing", "Mobile", "Smart", "Travel", "Cameras", "Home & Lifestyle", "Accessories", "Bundles"],
+      default: "Audio",
     },
     brand: {
       type: String,
       required: true,
+      default: "AgentCommerce Generic",
     },
     price: {
       type: Number,
@@ -81,6 +82,39 @@ const productSchema = new mongoose.Schema(
       connectivity: String,
       foldable: Boolean,
       chargingType: String,
+      processor: String,
+      ram: String,
+      storage: String,
+      display: String,
+      compatibility: String,
+    },
+    // AI Discovery & Inspection Metadata
+    useCases: [
+      {
+        type: String,
+      },
+    ],
+    targetAudience: {
+      type: String,
+      default: "General Consumer",
+    },
+    compatibleProducts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    aiMetadata: {
+      discoverabilityScore: {
+        type: Number,
+        default: 95,
+      },
+      policyRiskLevel: {
+        type: String,
+        enum: ["LOW", "MEDIUM", "HIGH"],
+        default: "LOW",
+      },
+      recommendedCrossSells: [String],
     },
   },
   {

@@ -13,11 +13,19 @@ const api = axios.create({
 export const productApi = {
   getProducts: (params) => api.get('/products', { params }),
   getProductById: (id) => api.get(`/products/${id}`),
+  createProduct: (data) => api.post('/products', data),
+  updateProduct: (id, data) => api.put(`/products/${id}`, data),
+  deleteProduct: (id) => api.delete(`/products/${id}`),
+  getAiInspector: (id) => api.get(`/products/${id}/ai-inspector`),
 };
 
 export const policyApi = {
   getPolicy: () => api.get('/policy'),
   updatePolicy: (data) => api.put('/policy', data),
+};
+
+export const merchantApi = {
+  getOverview: () => api.get('/merchant/overview'),
 };
 
 export const cartApi = {

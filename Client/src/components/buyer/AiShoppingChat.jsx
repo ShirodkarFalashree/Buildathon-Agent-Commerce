@@ -16,7 +16,7 @@ import {
 import { agentApi, paymentApi } from '../../services/api';
 
 export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestApproval, onPaymentComplete, isOpen, onClose }) {
-  const [prompt, setPrompt] = useState('Find budget ANC headphones under ₹10,000.');
+  const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [checkingOut, setCheckingOut] = useState(false);
   const [chatResult, setChatResult] = useState(null);
@@ -32,7 +32,7 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
   // Automatically reset chat when session ID changes (e.g. after order completion)
   useEffect(() => {
     setChatResult(null);
-    setPrompt('Find budget ANC headphones under ₹10,000.');
+    setPrompt('');
   }, [sessionId]);
 
   const handleSend = async (customPrompt) => {
@@ -241,21 +241,72 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
               <p className="text-xs text-slate-200">{chatResult.intentSummary}</p>
             </div>
 
-            {/* Tool Calls Execution Trace */}
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
-              <div className="flex items-center space-x-1.5 text-xs font-bold text-slate-300">
-                <Activity className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Agent Decision & Tool Call Execution</span>
-              </div>
-              <div className="space-y-1.5">
-                {chatResult.toolCalls?.map((t, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800/50 pb-1">
-                    <span className="font-mono text-indigo-300">✓ {t.name}()</span>
-                    <span className="text-slate-300 font-medium truncate max-w-[220px]">{t.result}</span>
+            {/* 8-Step Agent-to-Agent (A2A) Live Dialogue & Protocol Trace */}
+            {chatResult.a2aProtocolSteps && chatResult.a2aProtocolSteps.length > 0 && (
+              <div className="p-4 rounded-xl bg-slate-900/95 border border-indigo-500/40 space-y-3 shadow-xl">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                  <div className="flex items-center space-x-2">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                    </span>
+                    <span className="text-xs font-bold text-white tracking-wide">Live Inter-Agent (A2A) Dialogue</span>
                   </div>
-                ))}
+                  <span className="text-[10px] font-mono text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20 font-semibold">
+                    Dual Autonomous Policy
+                  </span>
+                </div>
+
+                <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                  {chatResult.a2aProtocolSteps.map((step, idx) => {
+                    const isBuyer = step.sender === 'BUYER_AGENT' || step.sender === 'BUYER_HUMAN';
+                    const isMerchant = step.sender === 'MERCHANT_AGENT';
+                    const isPayment = step.sender === 'PAYMENT_SERVICE';
+
+                    return (
+                      <div key={idx} className={`flex items-start space-x-2.5 ${isMerchant ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                        {/* Agent Avatar Icon */}
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 border shadow-sm ${
+                          isBuyer ? 'bg-indigo-600/20 border-indigo-500/40 text-indigo-300' :
+                          isMerchant ? 'bg-emerald-600/20 border-emerald-500/40 text-emerald-300' :
+                          isPayment ? 'bg-sky-600/20 border-sky-500/40 text-sky-300' :
+                          'bg-amber-600/20 border-amber-500/40 text-amber-300'
+                        }`}>
+                          {isBuyer ? '🤖' : isMerchant ? '🏪' : isPayment ? '💳' : '🛡️'}
+                        </div>
+
+                        {/* Speech Bubble */}
+                        <div className={`flex-1 p-2.5 rounded-xl text-xs space-y-1 border ${
+                          isBuyer ? 'bg-indigo-950/40 border-indigo-500/20 text-slate-200' :
+                          isMerchant ? 'bg-emerald-950/40 border-emerald-500/20 text-slate-200' :
+                          isPayment ? 'bg-sky-950/40 border-sky-500/20 text-slate-200' :
+                          'bg-amber-950/40 border-amber-500/20 text-slate-200'
+                        }`}>
+                          <div className="flex items-center justify-between text-[10px]">
+                            <span className={`font-mono font-bold ${
+                              isBuyer ? 'text-indigo-400' :
+                              isMerchant ? 'text-emerald-400' :
+                              isPayment ? 'text-sky-400' :
+                              'text-amber-400'
+                            }`}>
+                              {step.sender.replace('_', ' ')} → {step.receiver.replace('_', ' ')}
+                            </span>
+                            <span className="text-[9px] text-slate-400 font-mono">Step {step.stepNumber}</span>
+                          </div>
+
+                          <p className="font-medium leading-relaxed">{step.message}</p>
+                          {step.detail && (
+                            <p className="text-[10px] text-slate-400 border-t border-slate-800/80 pt-1 mt-1 font-mono">
+                              💡 {step.detail}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Recommendation Card */}
             {chatResult.primaryProduct && (
@@ -373,7 +424,7 @@ export default function AiShoppingChat({ sessionId, onAgentResponse, onRequestAp
             type="text"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Ask AI agent for recommendations..."
+            placeholder="Ask AI agent for recommendations (e.g. Find travel headphones under ₹20k)..."
             className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
           />
           <button

@@ -72,47 +72,6 @@ export default function MerchantLayout({ policy, setPolicy, merchantUser, onLogo
               <span>Store Dashboard</span>
             </NavLink>
 
-            <NavLink
-              to="/merchant/catalog"
-              className={({ isActive }) =>
-                `flex items-center space-x-3 px-3 py-2.5 rounded-xl font-semibold transition-all ${
-                  isActive
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
-                }`
-              }
-            >
-              <Package className="w-4 h-4" />
-              <span>Product Catalog</span>
-            </NavLink>
-
-            <NavLink
-              to="/merchant/policy"
-              className={({ isActive }) =>
-                `flex items-center space-x-3 px-3 py-2.5 rounded-xl font-semibold transition-all ${
-                  isActive
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
-                }`
-              }
-            >
-              <Sliders className="w-4 h-4" />
-              <span>AI Spending Policy</span>
-            </NavLink>
-
-            <NavLink
-              to="/merchant/audit"
-              className={({ isActive }) =>
-                `flex items-center space-x-3 px-3 py-2.5 rounded-xl font-semibold transition-all ${
-                  isActive
-                    ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
-                }`
-              }
-            >
-              <Activity className="w-4 h-4" />
-              <span>Decision Audit Log</span>
-            </NavLink>
           </nav>
 
           {/* Policy Quick Summary */}

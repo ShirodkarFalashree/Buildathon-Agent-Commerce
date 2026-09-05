@@ -1,10 +1,9 @@
-const Razorpay = require("razorpay");
-const crypto = require("crypto");
 const Cart = require("../models/Cart");
 const Order = require("../models/Order");
 const Policy = require("../models/Policy");
 const AuditEvent = require("../models/AuditEvent");
 const PolicyService = require("../services/policyService");
+const PaymentService = require("../services/paymentService");
 
 // Helper to write audit events
 async function createAuditEvent(sessionId, actor, action, title, description, details = {}, status = "SUCCESS") {
@@ -25,7 +24,7 @@ async function createAuditEvent(sessionId, actor, action, title, description, de
   }
 }
 
-// 1. Create Razorpay Payment Order
+// 1. Create Razorpay Payment Order (Delegated to PaymentService)
 exports.createOrder = async (req, res) => {
   try {
     const { sessionId, cartId, isApproved = false } = req.body;
@@ -42,7 +41,7 @@ exports.createOrder = async (req, res) => {
     cart.recalculateTotals();
     const amountInINR = cart.total;
 
-    // Check policy deterministically
+    // Evaluate policy deterministically
     const policyResult = await PolicyService.evaluatePurchase(amountInINR);
 
     if (!policyResult.allowed) {
@@ -74,59 +73,13 @@ exports.createOrder = async (req, res) => {
     }
 
     const orderNumber = `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`;
-    const amountInPaisa = Math.round(amountInINR * 100);
 
-    const keyId = process.env.RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-
-    let razorpayOrder;
-
-    if (keyId && keySecret && !keyId.includes("AgentCommerce")) {
-      try {
-        const razorpayInstance = new Razorpay({
-          key_id: keyId,
-          key_secret: keySecret,
-        });
-
-        razorpayOrder = await razorpayInstance.orders.create({
-          amount: amountInPaisa,
-          currency: "INR",
-          receipt: orderNumber,
-          notes: {
-            sessionId,
-            cartId: cart._id.toString(),
-            agentType: "SALES_AGENT",
-          },
-        });
-      } catch (rzpErr) {
-        console.warn("Razorpay official API order creation note:", rzpErr.message);
-        razorpayOrder = {
-          id: `order_test_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-          entity: "order",
-          amount: amountInPaisa,
-          amount_paid: 0,
-          amount_due: amountInPaisa,
-          currency: "INR",
-          receipt: orderNumber,
-          status: "created",
-          attempts: 0,
-          created_at: Math.floor(Date.now() / 1000),
-        };
-      }
-    } else {
-      razorpayOrder = {
-        id: `order_test_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
-        entity: "order",
-        amount: amountInPaisa,
-        amount_paid: 0,
-        amount_due: amountInPaisa,
-        currency: "INR",
-        receipt: orderNumber,
-        status: "created",
-        attempts: 0,
-        created_at: Math.floor(Date.now() / 1000),
-      };
-    }
+    // Create Razorpay Order strictly via PaymentService
+    const razorpayOrder = await PaymentService.createRazorpayOrder(amountInINR, orderNumber, {
+      sessionId,
+      cartId: cart._id.toString(),
+      agentType: "PAYMENT_SERVICE",
+    });
 
     // Save pending Order in MongoDB
     const newOrder = await Order.create({
@@ -159,9 +112,9 @@ exports.createOrder = async (req, res) => {
 
     await createAuditEvent(
       sessionId,
-      "SALES_AGENT",
+      "PAYMENT_SERVICE",
       "PAYMENT_INITIATED",
-      `Razorpay Test Order Created (${razorpayOrder.id})`,
+      `Razorpay Order Created (${razorpayOrder.id})`,
       `Initiated payment of ₹${amountInINR.toLocaleString()} (Order #${orderNumber})`,
       {
         orderId: newOrder._id,
@@ -176,7 +129,7 @@ exports.createOrder = async (req, res) => {
       success: true,
       order: newOrder,
       razorpayOrder,
-      keyId: keyId || "rzp_test_TY0D8SOVosBKXb",
+      keyId: process.env.RAZORPAY_KEY_ID || "rzp_test_TY0D8SOVosBKXb",
     });
   } catch (error) {
     console.error("Create order error:", error);
@@ -201,18 +154,12 @@ exports.verifyPayment = async (req, res) => {
       });
     }
 
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
-
-    // Verify HMAC SHA256 signature if keySecret provided and signature present
-    let isSignatureValid = true;
-    if (keySecret && razorpay_signature && razorpay_signature !== "test_mode_signature") {
-      const generatedSignature = crypto
-        .createHmac("sha256", keySecret)
-        .update(`${razorpay_order_id}|${razorpay_payment_id}`)
-        .digest("hex");
-
-      isSignatureValid = generatedSignature === razorpay_signature;
-    }
+    // Verify HMAC SHA256 signature using PaymentService
+    const isSignatureValid = PaymentService.verifyPaymentSignature(
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature
+    );
 
     if (!isSignatureValid) {
       order.status = "failed";
@@ -221,7 +168,7 @@ exports.verifyPayment = async (req, res) => {
 
       await createAuditEvent(
         order.sessionId,
-        "SYSTEM_POLICY",
+        "PAYMENT_SERVICE",
         "PAYMENT_FAILED",
         "Payment Verification Failed",
         "Razorpay HMAC signature mismatch or untrusted payment source",
@@ -256,9 +203,9 @@ exports.verifyPayment = async (req, res) => {
     // Log Payment Verification & Order Completion Audit Events
     await createAuditEvent(
       order.sessionId,
-      "SYSTEM_POLICY",
+      "PAYMENT_SERVICE",
       "PAYMENT_VERIFIED",
-      "Razorpay Test Payment Verified",
+      "Razorpay Payment Verified & Captured",
       `Payment of ₹${order.totalAmount.toLocaleString()} captured successfully (ID: ${paymentId})`,
       {
         orderId: order._id,
@@ -270,9 +217,9 @@ exports.verifyPayment = async (req, res) => {
 
     await createAuditEvent(
       order.sessionId,
-      "SALES_AGENT",
+      "PAYMENT_SERVICE",
       "ORDER_CREATED",
-      `Order #${order.orderNumber} Completed`,
+      `Order #${order.orderNumber} Confirmed in MongoDB`,
       `Successfully processed order for ${order.items.length} item(s)`,
       {
         orderNumber: order.orderNumber,
