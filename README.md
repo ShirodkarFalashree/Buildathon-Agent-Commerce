@@ -2,8 +2,6 @@
 > **Autonomous Agent-to-Agent (A2A) Commerce & Payment Orchestration Platform**  
 > *Built for the Razorpay Buildathon*
 
-![AgentRelay Light Enterprise UI](https://images.unsplash.com/photo-1556742049-0a67daf4005a?q=80&w=1200&auto=format&fit=crop)
-
 ---
 
 ## 🌟 Overview
